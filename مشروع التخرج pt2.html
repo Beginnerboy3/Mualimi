@@ -1,553 +1,0 @@
-
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>مدرستي</title>
-<style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:Arial}
-body{background:#f0f0f0;display:flex;justify-content:center;align-items:center;min-height:100vh;padding:10px}
-.phone{width:375px;height:812px;background:#f0f8f5;border-radius:40px;box-shadow:0 25px 50px rgba(0,0,0,0.25);overflow:hidden;position:relative;border:12px solid #1a1a1a}
-.screen{width:100%;height:100%;position:absolute;top:0;left:0;overflow-y:auto;display:none;padding:20px}
-.screen.active{display:block}
-.btn{width:85%;padding:15px;background:#009664;color:white;border:none;border-radius:25px;font-size:16px;font-weight:bold;cursor:pointer;margin:10px auto;display:block}
-.btn-outline{width:85%;padding:15px;background:white;color:#009664;border:2px solid #009664;border-radius:25px;font-size:16px;font-weight:bold;cursor:pointer;margin:10px auto;display:block}
-.input{width:100%;padding:15px;border:2px solid #ddd;border-radius:12px;margin:10px 0;font-size:16px}
-.card{background:white;border-radius:15px;padding:15px;margin:10px 0;cursor:pointer}
-.header{background:white;padding:15px;margin:-20px -20px 20px -20px;display:flex;align-items:center;border-bottom:1px solid #eee}
-.back{cursor:pointer;font-size:24px;margin-left:10px}
-.title{flex:1;text-align:center;font-weight:bold}
-.avatar{width:80px;height:80px;background:#e8f5f0;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:40px;margin:10px auto;border:3px solid #009664}
-.filter{display:flex;gap:10px;margin:15px 0;overflow-x:auto;padding:10px 0}
-.filter-btn{padding:8px 15px;background:white;border:2px solid #ddd;border-radius:20px;cursor:pointer;white-space:nowrap}
-.filter-btn.active{background:#009664;color:white;border-color:#009664}
-.teacher{display:flex;align-items:center;background:white;padding:15px;border-radius:15px;margin:10px 0;cursor:pointer}
-.t-avatar{width:50px;height:50px;background:#e8f5f0;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:24px;margin-left:10px}
-.tag{display:inline-block;background:#e8f5f0;color:#009664;padding:5px 10px;border-radius:10px;font-size:12px;margin:2px}
-.nav{position:fixed;bottom:0;left:0;right:0;background:white;display:flex;justify-content:space-around;padding:10px;border-top:1px solid #eee}
-.nav-item{text-align:center;color:#999;cursor:pointer}
-.nav-item.active{color:#009664}
-.hidden{display:none!important}
-</style>
-</head>
-<body>
-<div class="phone">
-
-<!-- 1. LOGIN SCREEN -->
-<div class="screen active" id="s-login" style="display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center">
-<div style="font-size:80px;margin-bottom:20px">📚</div>
-<h1 style="color:#333;margin-bottom:30px">تسجيل الدخول</h1>
-<select class="input" id="login-type" style="width:85%">
-<option value="">اختر نوع الحساب</option>
-<option value="student">طالب / ولي أمر</option>
-<option value="teacher">معلم</option>
-</select>
-<input type="text" class="input" placeholder="البريد الإلكتروني أو رقم الهاتف" style="width:85%">
-<input type="password" class="input" placeholder="كلمة المرور" style="width:85%">
-<button class="btn" onclick="doLogin()">دخول</button>
-<button class="btn-outline" onclick="showScreen('s-reg-type')">إنشاء حساب جديد</button>
-</div>
-
-<!-- 2. REGISTER TYPE -->
-<div class="screen" id="s-reg-type">
-<div class="header"><span class="back" onclick="showScreen('s-login')">←</span><span class="title">إنشاء حساب</span></div>
-<h2 style="margin:20px 0">أنا...</h2>
-<div class="card" onclick="showScreen('s-reg-student')">
-<div style="display:flex;align-items:center">
-<div class="t-avatar">👨‍🎓</div>
-<div><h3>طالب / ولي أمر</h3><p style="color:#666;font-size:14px">أبحث عن معلم</p></div>
-<span style="margin-right:auto;color:#009664">›</span>
-</div>
-</div>
-<div class="card" onclick="showScreen('s-reg-teacher')">
-<div style="display:flex;align-items:center">
-<div class="t-avatar">👨‍🏫</div>
-<div><h3>معلم</h3><p style="color:#666;font-size:14px">أريد التدريس</p></div>
-<span style="margin-right:auto;color:#009664">›</span>
-</div>
-</div>
-</div>
-
-<!-- 3. REGISTER STUDENT -->
-<div class="screen" id="s-reg-student">
-<div class="header"><span class="back" onclick="showScreen('s-reg-type')">←</span><span class="title">تسجيل طالب</span></div>
-<input class="input" placeholder="الاسم الكامل">
-<input class="input" placeholder="البريد الإلكتروني / رقم الهاتف">
-<input class="input" type="password" placeholder="كلمة المرور">
-<input class="input" placeholder="العمر">
-<input class="input" placeholder="السنة الدراسية (مثال: ثالث ثانوي)">
-<input class="input" placeholder="المنطقة">
-<button class="btn" onclick="showScreen('s-home')">إنشاء حساب</button>
-</div>
-
-<!-- 4. REGISTER TEACHER -->
-<div class="screen" id="s-reg-teacher">
-<div class="header"><span class="back" onclick="showScreen('s-reg-type')">←</span><span class="title">تسجيل معلم</span></div>
-<input class="input" placeholder="الاسم الكامل">
-<input class="input" placeholder="البريد الإلكتروني / رقم الهاتف">
-<input class="input" type="password" placeholder="كلمة المرور">
-<input class="input" placeholder="المنطقة التي تدرس فيها">
-<div style="margin:15px 0">
-<p style="margin-bottom:10px">المواد التي تدرسها:</p>
-<div style="display:flex;flex-wrap:wrap;gap:5px">
-<span class="tag" onclick="this.classList.toggle('selected')">رياضيات</span>
-<span class="tag" onclick="this.classList.toggle('selected')">فيزياء</span>
-<span class="tag" onclick="this.classList.toggle('selected')">كيمياء</span>
-<span class="tag" onclick="this.classList.toggle('selected')">إنجليزي</span>
-<span class="tag" onclick="this.classList.toggle('selected')">عربي</span>
-<span class="tag" onclick="this.classList.toggle('selected')">برمجة</span>
-</div>
-</div>
-<div style="margin:15px 0">
-<label><input type="checkbox"> أقدم دروس عن بعد (أونلاين)</label><br>
-<label><input type="checkbox"> أقدم دروس في المنزل</label>
-</div>
-<div class="card" style="text-align:center;border:2px dashed #ccc">
-<div style="font-size:40px;color:#009664">📤</div>
-<p>اضغط لرفع الشهادات</p>
-</div>
-<button class="btn" onclick="showScreen('s-home')">إنشاء حساب</button>
-</div>
-
-<!-- 5. HOME -->
-<div class="screen" id="s-home">
-<div class="header"><span class="title">الرئيسية</span><span class="back" style="margin-right:auto" onclick="showScreen('s-profile')">👤</span></div>
-
-<!-- FILTER -->
-<div class="filter">
-<button class="filter-btn active" onclick="filterTeachers('all',this)">الكل</button>
-<button class="filter-btn" onclick="filterTeachers('math',this)">رياضيات</button>
-<button class="filter-btn" onclick="filterTeachers('physics',this)">فيزياء</button>
-<button class="filter-btn" onclick="filterTeachers('english',this)">إنجليزي</button>
-<button class="filter-btn" onclick="filterTeachers('arabic',this)">عربي</button>
-</div>
-
-<!-- TEACHERS LIST -->
-<div id="teachers-list">
-<div class="teacher" data-subject="math" onclick="showScreen('s-teacher-profile')">
-<div class="t-avatar">👨‍🏫</div>
-<div style="flex:1">
-<h4>أحمد خالد - رياضيات</h4>
-<p style="color:#666;font-size:14px">⭐ 4.9 | 💰 120 ريال/ساعة</p>
-<div><span class="tag">📍 الرياض</span><span class="tag">💻 عن بعد</span></div>
-</div>
-</div>
-
-<div class="teacher" data-subject="physics" onclick="showScreen('s-teacher-profile')">
-<div class="t-avatar">👩‍🏫</div>
-<div style="flex:1">
-<h4>سارة أحمد - فيزياء</h4>
-<p style="color:#666;font-size:14px">⭐ 4.8 | 💰 150 ريال/ساعة</p>
-<div><span class="tag">📍 جدة</span><span class="tag">🏠 منزلي</span></div>
-</div>
-</div>
-
-<div class="teacher" data-subject="english" onclick="showScreen('s-teacher-profile')">
-<div class="t-avatar">👨‍🏫</div>
-<div style="flex:1">
-<h4>محمد علي - إنجليزي</h4>
-<p style="color:#666;font-size:14px">⭐ 4.7 | 💰 100 ريال/ساعة</p>
-<div><span class="tag">📍 الدمام</span><span class="tag">💻 عن بعد</span><span class="tag">🏠 منزلي</span></div>
-</div>
-</div>
-
-<div class="teacher" data-subject="math" onclick="showScreen('s-teacher-profile')">
-<div class="t-avatar">👩‍🏫</div>
-<div style="flex:1">
-<h4>فاطمة حسن - رياضيات</h4>
-<p style="color:#666;font-size:14px">⭐ 5.0 | 💰 130 ريال/ساعة</p>
-<div><span class="tag">📍 مكة</span><span class="tag">💻 عن بعد</span></div>
-</div>
-</div>
-</div>
-
-<div class="nav">
-<div class="nav-item active" onclick="showScreen('s-home')">🏠<br><small>الرئيسية</small></div>
-<div class="nav-item" onclick="showScreen('s-sessions')">📅<br><small>حصصي</small></div>
-<div class="nav-item" onclick="showScreen('s-chats')">💬<br><small>محادثات</small></div>
-<div class="nav-item" onclick="showScreen('s-profile')">👤<br><small>حسابي</small></div>
-</div>
-</div>
-
-<!-- 6. TEACHER PROFILE -->
-<div class="screen" id="s-teacher-profile">
-<div class="header"><span class="back" onclick="showScreen('s-home')">←</span><span class="title">الملف الشخصي</span></div>
-<div style="text-align:center;padding:20px">
-<div class="avatar">👨‍🏫</div>
-<h2>أحمد خالد</h2>
-<p style="color:#666">معلم رياضيات</p>
-<div style="background:#fff8e1;display:inline-block;padding:10px 20px;border-radius:20px;margin:10px 0">
-⭐⭐⭐⭐⭐ <strong>4.9</strong>
-</div>
-<div style="margin:15px 0">
-<span class="tag">رياضيات</span>
-<span class="tag">فيزياء</span>
-<span class="tag">جبر</span>
-</div>
-<button class="btn" onclick="showScreen('s-booking')">احجز الآن</button>
-</div>
-<div class="card">
-<p>📍 <strong>الموقع:</strong> الرياض</p>
-<p style="margin-top:10px">💰 <strong>السعر:</strong> 120 ريال/ساعة</p>
-<p style="margin-top:10px">🎓 <strong>الخبرة:</strong> 5 سنوات</p>
-<p style="margin-top:10px">✅ <strong>متاح:</strong> عن بعد + منزلي</p>
-</div>
-</div>
-
-<!-- 7. BOOKING -->
-<div class="screen" id="s-booking">
-<div class="header"><span class="back" onclick="showScreen('s-teacher-profile')">←</span><span class="title">حجز حصة</span></div>
-
-<div style="margin:15px 0">
-<p><strong>نوع الحصة:</strong></p>
-<div style="display:flex;gap:10px;margin-top:10px">
-<button class="btn" style="flex:1;font-size:14px">💻 عن بعد</button>
-<button class="btn-outline" style="flex:1;font-size:14px">🏠 منزلي</button>
-</div>
-</div>
-
-<div style="margin:15px 0">
-<p><strong>التاريخ:</strong></p>
-<div style="display:flex;gap:10px;margin-top:10px;overflow-x:auto">
-<button class="btn" style="font-size:14px;padding:10px 20px">اليوم</button>
-<button class="btn-outline" style="font-size:14px;padding:10px 20px">غداً</button>
-<button class="btn-outline" style="font-size:14px;padding:10px 20px">الخميس</button>
-<button class="btn-outline" style="font-size:14px;padding:10px 20px">الجمعة</button>
-</div>
-</div>
-
-<div style="margin:15px 0">
-<p><strong>الوقت:</strong></p>
-<div style="display:flex;gap:10px;margin-top:10px;flex-wrap:wrap">
-<button class="btn-outline" style="font-size:14px;padding:10px 20px">4:00 م</button>
-<button class="btn" style="font-size:14px;padding:10px 20px">5:00 م</button>
-<button class="btn-outline" style="font-size:14px;padding:10px 20px">6:00 م</button>
-<button class="btn-outline" style="font-size:14px;padding:10px 20px">7:00 م</button>
-</div>
-</div>
-
-<div class="card" style="margin-top:20px">
-<div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid #eee">
-<span>سعر الحصة:</span><span>120 ريال</span>
-</div>
-<div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid #eee">
-<span>رسوم التطبيق:</span><span>10 ريال</span>
-</div>
-<div style="display:flex;justify-content:space-between;padding:10px 0;font-weight:bold;font-size:18px">
-<span>الإجمالي:</span><span style="color:#009664">130 ريال</span>
-</div>
-</div>
-
-<button class="btn" onclick="showScreen('s-payment')" style="margin-top:20px">تأكيد الحجز</button>
-</div>
-
-<!-- 8. PAYMENT -->
-<div class="screen" id="s-payment">
-<div class="header"><span class="back" onclick="showScreen('s-booking')">←</span><span class="title">الدفع</span></div>
-
-<div class="card">
-<h3 style="margin-bottom:15px">ملخص الطلب</h3>
-<p>حصة رياضيات مع أحمد خالد</p>
-<p style="color:#666;font-size:14px">الأحد 25 فبراير - 5:00 م</p>
-<div style="border-top:2px solid #eee;margin-top:15px;padding-top:15px;display:flex;justify-content:space-between;font-weight:bold">
-<span>الإجمالي:</span><span style="color:#009664">130 ريال</span>
-</div>
-</div>
-
-<h3 style="margin:20px 0 15px">طريقة الدفع:</h3>
-
-<div class="card" style="border:2px solid #009664" onclick="selectPayment(this)">
-<div style="display:flex;align-items:center">
-<div style="font-size:30px;margin-left:15px">💵</div>
-<div style="flex:1">
-<h4>الدفع عند الاستلام</h4>
-<p style="color:#666;font-size:14px">ادفع نقداً للمعلم</p>
-</div>
-<div style="width:24px;height:24px;background:#009664;border-radius:50%;border:3px solid #009664"></div>
-</div>
-</div>
-
-<div class="card" onclick="selectPayment(this)">
-<div style="display:flex;align-items:center">
-<div style="width:50px;height:50px;background:#e3f2fd;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:bold;color:#1976d2;margin-left:15px">T</div>
-<div style="flex:1">
-<h4>تابي</h4>
-<p style="color:#666;font-size:14px">4 دفعات بلا فوائد</p>
-</div>
-<div style="width:24px;height:24px;border:3px solid #ddd;border-radius:50%"></div>
-</div>
-</div>
-
-<div class="card" onclick="selectPayment(this)">
-<div style="display:flex;align-items:center">
-<div style="width:50px;height:50px;background:#fce4ec;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:bold;color:#c2185b;margin-left:15px">M</div>
-<div style="flex:1">
-<h4>تمارا</h4>
-<p style="color:#666;font-size:14px">3 دفعات بلا فوائد</p>
-</div>
-<div style="width:24px;height:24px;border:3px solid #ddd;border-radius:50%"></div>
-</div>
-</div>
-
-<button class="btn" onclick="alert('تم الحجز بنجاح!')" style="margin-top:20px">تأكيد الدفع - 130 ريال</button>
-</div>
-
-<!-- 9. MY SESSIONS -->
-<div class="screen" id="s-sessions">
-<div class="header"><span class="back" onclick="showScreen('s-home')">←</span><span class="title">حصصي</span></div>
-
-<div class="card">
-<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
-<h4>حصة رياضيات</h4>
-<span style="background:#e3f2fd;color:#1976d2;padding:5px 10px;border-radius:10px;font-size:12px">قادمة</span>
-</div>
-<p style="color:#666;font-size:14px">👨‍🏫 أحمد خالد</p>
-<p style="color:#666;font-size:14px">📅 غداً - 5:00 م</p>
-<p style="color:#666;font-size:14px">💻 عن بعد</p>
-<button class="btn-small" style="margin-top:10px" onclick="showScreen('s-chat')">دخول الحصة</button>
-</div>
-
-<div class="card">
-<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
-<h4>حصة فيزياء</h4>
-<span style="background:#e8f5e9;color:#388e3c;padding:5px 10px;border-radius:10px;font-size:12px">مكتملة</span>
-</div>
-<p style="color:#666;font-size:14px">👩‍🏫 سارة أحمد</p>
-<p style="color:#666;font-size:14px">📅 الأحد الماضي</p>
-<button class="btn-small" style="margin-top:10px;background:#666" onclick="showScreen('s-rating')">تقييم</button>
-</div>
-
-<div class="nav">
-<div class="nav-item" onclick="showScreen('s-home')">🏠<br><small>الرئيسية</small></div>
-<div class="nav-item active" onclick="showScreen('s-sessions')">📅<br><small>حصصي</small></div>
-<div class="nav-item" onclick="showScreen('s-chats')">💬<br><small>محادثات</small></div>
-<div class="nav-item" onclick="showScreen('s-profile')">👤<br><small>حسابي</small></div>
-</div>
-</div>
-
-<!-- 10. CHATS LIST -->
-<div class="screen" id="s-chats">
-<div class="header"><span class="title">المحادثات</span></div>
-
-<div class="teacher" onclick="showScreen('s-chat')">
-<div class="t-avatar">👨‍🏫</div>
-<div style="flex:1">
-<h4>أحمد خالد</h4>
-<p style="color:#666;font-size:14px">تمام، أنتظرك غداً...</p>
-</div>
-<div style="text-align:center">
-<span style="color:#666;font-size:12px">10:30</span>
-<div style="background:#009664;color:white;width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;margin:5px auto 0">2</div>
-</div>
-</div>
-
-<div class="teacher" onclick="showScreen('s-chat')">
-<div class="t-avatar">👩‍🏫</div>
-<div style="flex:1">
-<h4>سارة أحمد</h4>
-<p style="color:#666;font-size:14px">شكراً للحصة الممتعة!</p>
-</div>
-<div style="text-align:center">
-<span style="color:#666;font-size:12px">أمس</span>
-</div>
-</div>
-
-<div class="nav">
-<div class="nav-item" onclick="showScreen('s-home')">🏠<br><small>الرئيسية</small></div>
-<div class="nav-item" onclick="showScreen('s-sessions')">📅<br><small>حصصي</small></div>
-<div class="nav-item active" onclick="showScreen('s-chats')">💬<br><small>محادثات</small></div>
-<div class="nav-item" onclick="showScreen('s-profile')">👤<br><small>حسابي</small></div>
-</div>
-</div>
-
-<!-- 11. CHAT -->
-<div class="screen" id="s-chat">
-<div class="header">
-<span class="back" onclick="showScreen('s-chats')">←</span>
-<div style="display:flex;align-items:center;flex:1;margin-right:10px">
-<div class="t-avatar" style="width:40px;height:40px;font-size:20px">👨‍🏫</div>
-<div>
-<div style="font-weight:bold">أحمد خالد</div>
-<div style="font-size:12px;color:#4caf50">● متصل الآن</div>
-</div>
-</div>
-</div>
-
-<div style="padding:20px;padding-bottom:100px">
-<div style="background:white;padding:15px;border-radius:20px;margin-bottom:15px;max-width:80%;border-bottom-right-radius:5px">
-أهلاً! كيف يمكنني مساعدتك؟
-<div style="font-size:11px;color:#999;margin-top:5px">10:30</div>
-</div>
-
-<div style="background:#009664;color:white;padding:15px;border-radius:20px;margin-bottom:15px;max-width:80%;margin-right:auto;border-bottom-left-radius:5px">
-مرحباً، هل أنت متوفر غداً؟
-<div style="font-size:11px;opacity:0.8;margin-top:5px">10:32 ✓</div>
-</div>
-
-<div style="background:white;padding:15px;border-radius:20px;margin-bottom:15px;max-width:80%;border-bottom-right-radius:5px">
-نعم، متوفر من الساعة 4 عصراً. هل تريد حجز حصة؟
-<div style="font-size:11px;color:#999;margin-top:5px">10:33</div>
-</div>
-</div>
-
-<div style="position:fixed;bottom:0;left:0;right:0;background:white;padding:15px;display:flex;gap:10px;border-top:1px solid #eee">
-<input type="text" placeholder="اكتب رسالة..." style="flex:1;border:2px solid #eee;border-radius:25px;padding:12px 20px">
-<button style="width:50px;height:50px;background:#009664;border:none;border-radius:50%;color:white;font-size:18px">➤</button>
-</div>
-</div>
-
-<!-- 12. PROFILE -->
-<div class="screen" id="s-profile">
-<div class="header">
-<span class="title">حسابي</span>
-<span class="back" style="margin-right:auto;font-size:20px" onclick="showScreen('s-settings')">⚙️</span>
-</div>
-
-<div style="text-align:center;padding:20px">
-<div class="avatar" style="position:relative;cursor:pointer" onclick="alert('تغيير الصورة')">
-👨‍🎓
-<div style="position:absolute;bottom:0;right:0;background:#009664;color:white;width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px">📷</div>
-</div>
-<h2>محمد عبدالله</h2>
-<p style="color:#666">طالب - ثالث ثانوي</p>
-</div>
-
-<div class="card">
-<h3 style="margin-bottom:15px">معلوماتي</h3>
-<p>📧 mohammed@email.com</p>
-<p style="margin-top:10px">📱 0501234567</p>
-<p style="margin-top:10px">📍 الرياض</p>
-<p style="margin-top:10px">🎂 17 سنة</p>
-</div>
-
-<div class="card" style="margin-top:15px">
-<h3 style="margin-bottom:15px">إحصائيات</h3>
-<div style="display:flex;justify-content:space-around;text-align:center">
-<div>
-<div style="font-size:24px;font-weight:bold;color:#009664">12</div>
-<div style="font-size:14px;color:#666">حصة</div>
-</div>
-<div>
-<div style="font-size:24px;font-weight:bold;color:#009664">5</div>
-<div style="font-size:14px;color:#666">معلمين</div>
-</div>
-<div>
-<div style="font-size:24px;font-weight:bold;color:#009664">48</div>
-<div style="font-size:14px;color:#666">ساعة</div>
-</div>
-</div>
-</div>
-
-<button class="btn-outline" style="margin-top:20px" onclick="showScreen('s-login')">تسجيل الخروج</button>
-
-<div class="nav">
-<div class="nav-item" onclick="showScreen('s-home')">🏠<br><small>الرئيسية</small></div>
-<div class="nav-item" onclick="showScreen('s-sessions')">📅<br><small>حصصي</small></div>
-<div class="nav-item" onclick="showScreen('s-chats')">💬<br><small>محادثات</small></div>
-<div class="nav-item active" onclick="showScreen('s-profile')">👤<br><small>حسابي</small></div>
-</div>
-</div>
-
-<!-- 13. SETTINGS -->
-<div class="screen" id="s-settings">
-<div class="header"><span class="back" onclick="showScreen('s-profile')">←</span><span class="title">الإعدادات</span></div>
-
-<div class="card" onclick="alert('تعديل الملف الشخصي')">
-<h4>✏️ تعديل الملف الشخصي</h4>
-<p style="color:#666;font-size:14px;margin-top:5px">تغيير الاسم، الصورة، البيانات</p>
-</div>
-
-<div class="card" onclick="alert('تغيير كلمة المرور')">
-<h4>🔒 تغيير كلمة المرور</h4>
-</div>
-
-<div class="card" onclick="alert('الإشعارات')">
-<h4>🔔 الإشعارات</h4>
-<p style="color:#666;font-size:14px;margin-top:5px">تفعيل/تعطيل الإشعارات</p>
-</div>
-
-<div class="card" onclick="alert('المساعدة')">
-<h4>❓ المساعدة والدعم</h4>
-</div>
-
-<div class="card" onclick="alert('عن التطبيق')">
-<h4>ℹ️ عن التطبيق</h4>
-</div>
-</div>
-
-<!-- 14. RATING -->
-<div class="screen" id="s-rating">
-<div class="header"><span class="back" onclick="showScreen('s-sessions')">←</span><span class="title">تقييم الحصة</span></div>
-
-<div style="text-align:center;padding:20px">
-<div class="avatar">👩‍🏫</div>
-<h2>سارة أحمد</h2>
-<p style="color:#666">حصة فيزياء</p>
-
-<div style="display:flex;justify-content:center;gap:10px;margin:30px 0">
-<span style="font-size:40px;color:#ffc107;cursor:pointer" onclick="rate(1)">⭐</span>
-<span style="font-size:40px;color:#ffc107;cursor:pointer" onclick="rate(2)">⭐</span>
-<span style="font-size:40px;color:#ffc107;cursor:pointer" onclick="rate(3)">⭐</span>
-<span style="font-size:40px;color:#ffc107;cursor:pointer" onclick="rate(4)">⭐</span>
-<span style="font-size:40px;color:#ddd;cursor:pointer" onclick="rate(5)">⭐</span>
-</div>
-
-<p style="color:#009664;font-weight:bold">جيد جداً!</p>
-
-<textarea placeholder="اكتب تعليقك..." style="width:100%;min-height:150px;border:2px solid #eee;border-radius:15px;padding:15px;margin-top:20px;font-size:16px"></textarea>
-
-<button class="btn" style="margin-top:20px" onclick="alert('تم إرسال التقييم!');showScreen('s-sessions')">إرسال التقييم</button>
-</div>
-</div>
-
-<script>
-// Navigation
-function showScreen(id) {
-document.querySelectorAll('.screen').forEach(s=>{s.classList.remove('active');s.style.display='none'});
-document.getElementById(id).classList.add('active');
-document.getElementById(id).style.display='block';
-}
-
-// Filter teachers
-function filterTeachers(subject, btn) {
-document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
-btn.classList.add('active');
-
-const teachers = document.querySelectorAll('.teacher');
-teachers.forEach(t=>{
-if(subject==='all'||t.dataset.subject===subject){
-t.style.display='flex';
-}else{
-t.style.display='none';
-}
-});
-}
-
-// Payment selection
-function selectPayment(card) {
-document.querySelectorAll('.card').forEach(c=>c.style.border='none');
-card.style.border='2px solid #009664';
-}
-
-// Rating
-function rate(stars) {
-const starElements = document.querySelectorAll('#s-rating span');
-starElements.forEach((s,i)=>{
-if(i<stars) s.style.color='#ffc107';
-else s.style.color='#ddd';
-});
-}
-
-// Login
-function doLogin() {
-const type = document.getElementById('login-type').value;
-if(!type) {
-alert('الرجاء اختيار نوع الحساب');
-return;
-}
-showScreen('s-home');
-}
-</script>
-</body>
-</html>
